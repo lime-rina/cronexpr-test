@@ -124,6 +124,7 @@ func (expr *Expression) calculateActualDaysOfMonth(year, month int) []int {
 				actualDaysOfMonthMap[v] = true
 			}
 		}
+
 	}
 
 	return toList(actualDaysOfMonthMap)

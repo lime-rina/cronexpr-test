@@ -102,6 +102,15 @@ var (
 		`6`: 6, `sat`: 6, `saturday`: 6,
 		`7`: 0,
 	}
+	dowTokensByIndex = map[int]string{
+		0: `sun`,
+		1: `mon`,
+		2: `tue`,
+		3: `wed`,
+		4: `thu`,
+		5: `fri`,
+		6: `sat`,
+	}
 )
 
 /******************************************************************************/
@@ -369,8 +378,7 @@ func (expr *Expression) domFieldHandler(s string) error {
 					} else {
 						// `L-3`
 						if makeLayoutRegexp(layoutLastNthDom, domDescriptor.valuePattern).MatchString(snormal) {
-							fmt.Println("Mtachesss!! DOM")
-							expr.lastNthDayOfMonth = captureNumber(snormal)
+							expr.lastNthDayOfMonth = captureNumberFromExpression(snormal)
 						} else {
 							return fmt.Errorf("syntax error in day-of-month field: '%s'", sdirective)
 						}
@@ -517,7 +525,11 @@ func makeLayoutRegexp(layout, value string) *regexp.Regexp {
 	return re
 }
 
-func captureNumber(inputString string) int {
+// This function is used to retrieve the number after the following expression L-number
+// example: L-3 -> 3
+// example: L-43 -> 43
+// FYI : If the number is greater then the month days, the calculations are transfferred to previous month(s)
+func captureNumberFromExpression(inputString string) int {
 	re := regexp.MustCompile(layoutLastNthDom)
 	submatchIndexes := re.FindStringSubmatchIndex(inputString)
 
@@ -528,13 +540,12 @@ func captureNumber(inputString string) int {
 
 		capturedNumber, err := strconv.Atoi(capturedNumberStr)
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("Error in captureNumberFromExpression:", err)
+			return 0
 		}
-
-		fmt.Println("Captured number:", capturedNumber)
 		return capturedNumber
 	} else {
-		fmt.Println("No match found.")
+		fmt.Println("No match found for desired layout in captureNumberFromExpression.")
 	}
 	return 0
 }
