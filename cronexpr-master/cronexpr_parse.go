@@ -320,7 +320,6 @@ func (expr *Expression) domFieldHandler(s string) error {
 		case none:
 			sdirective := s[directive.sbeg:directive.send]
 			snormal := strings.ToLower(sdirective)
-
 			// `L`
 			if makeLayoutRegexp(layoutLastDom, domDescriptor.valuePattern).MatchString(snormal) {
 				expr.lastDayOfMonth = true

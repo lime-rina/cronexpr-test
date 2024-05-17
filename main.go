@@ -13,12 +13,12 @@ func main() {
 	// CronHelper("0 0 17 LW 1/3 ? *", time.Now())
 	// CronHelper("* * 16 L-2 2/3 ? *", time.Date(3023, time.August, 30, 0, 0, 0, 0, time.UTC))
 	// n := CronHelper("0 0 0 L-3 * * ?", time.Now())
-	// n := CronHelper("0 0 29 2 *", time.Date(2323, time.January, 30, 0, 0, 0, 0, time.UTC))
-	from, _ := time.Parse("2006-01-02", "2013-08-31")
+	n := CronHelper("0 0 29 2 *", time.Date(2323, time.January, 30, 0, 0, 0, 0, time.UTC))
+	// from, _ := time.Parse("2006-01-02", "2013-08-31")
 	// fmt.Println(from)
-	n := cronexpr.MustParse("* * * * * 1980").Next(from)
+	// n := cronexpr.MustParse("* * * * * 1980").Next(from)
 
-	// CronHelper2("0 0 0 * * THUL ?", time.Date(2124, time.August, 30, 0, 0, 0, 0, time.UTC))
+	CronHelper2("0 0 0 * * THUL ?", time.Date(2124, time.August, 30, 0, 0, 0, 0, time.UTC))
 	fmt.Println("next: ", n)
 
 }

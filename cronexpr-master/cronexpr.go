@@ -158,13 +158,9 @@ func Parse(cronLine string) (*Expression, error) {
 // The zero value of time.Time is returned if no matching time instant exists
 // or if a `fromTime` is itself a zero value.
 
-func (expr *Expression) generateYearList(props ...int) {
+func (expr *Expression) generateYearList(currentYear int) {
 	yearList := make([]int, 0)
-	currentYear := props[0]
-	n := props[1]
-	for i := currentYear; i <= currentYear+n; i++ {
-		yearList = append(yearList, i)
-	}
+	yearList = append(yearList, currentYear, currentYear+1)
 	expr.yearList = yearList
 }
 
@@ -180,7 +176,7 @@ func (expr *Expression) Next(fromTime time.Time) time.Time {
 WRAP:
 
 	v := t.Year()
-	expr.generateYearList(v, 1)
+	expr.generateYearList(v)
 	if i := sort.SearchInts(expr.yearList, v); i == len(expr.yearList) {
 		return time.Time{}
 	} else if v != expr.yearList[i] {
