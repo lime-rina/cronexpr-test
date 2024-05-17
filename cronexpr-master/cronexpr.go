@@ -113,7 +113,7 @@ func Parse(cronLine string) (*Expression, error) {
 	}
 	field += 1
 
-	// day of month field HERE!!
+	// day of month field
 	err = expr.domFieldHandler(cron[indices[field][0]:indices[field][1]])
 	if err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func Parse(cronLine string) (*Expression, error) {
 	}
 	field += 1
 
-	// day of week field HERE!!!
+	// day of week field
 	err = expr.dowFieldHandler(cron[indices[field][0]:indices[field][1]])
 	if err != nil {
 		return nil, err
@@ -141,7 +141,7 @@ func Parse(cronLine string) (*Expression, error) {
 			return nil, err
 		}
 	} else {
-		expr.yearList = yearDescriptor.defaultList
+		expr.yearList = nil
 	}
 
 	return &expr, nil
@@ -157,6 +157,17 @@ func Parse(cronLine string) (*Expression, error) {
 //
 // The zero value of time.Time is returned if no matching time instant exists
 // or if a `fromTime` is itself a zero value.
+
+func (expr *Expression) generateYearList(props ...int) {
+	yearList := make([]int, 0)
+	currentYear := props[0]
+	n := props[1]
+	for i := currentYear; i <= currentYear+n; i++ {
+		yearList = append(yearList, i)
+	}
+	expr.yearList = yearList
+}
+
 func (expr *Expression) Next(fromTime time.Time) time.Time {
 	// Special case
 	if fromTime.IsZero() {
@@ -169,6 +180,7 @@ func (expr *Expression) Next(fromTime time.Time) time.Time {
 WRAP:
 
 	v := t.Year()
+	expr.generateYearList(v, 1)
 	if i := sort.SearchInts(expr.yearList, v); i == len(expr.yearList) {
 		return time.Time{}
 	} else if v != expr.yearList[i] {

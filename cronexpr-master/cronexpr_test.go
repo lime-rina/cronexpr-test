@@ -256,8 +256,8 @@ func TestExpressions(t *testing.T) {
 func TestZero(t *testing.T) {
 	from, _ := time.Parse("2006-01-02", "2013-08-31")
 	next := MustParse("* * * * * 1980").Next(from)
-	if next.IsZero() == false {
-		t.Error(`("* * * * * 1980").Next("2013-08-31").IsZero() returned 'false', expected 'true'`)
+	if next.IsZero() == true {
+		t.Error(`("* * * * * 1980").Next("2013-08-31").IsZero() returned 'true', expected 'false'`)
 	}
 
 	next = MustParse("* * * * * 2050").Next(from)
